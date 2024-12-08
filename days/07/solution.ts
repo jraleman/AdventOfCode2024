@@ -1,22 +1,8 @@
-import * as fs from "node:fs";
+import { readInputFromFile } from "../utils.ts";
 
-type Equation = {
+export type Equation = {
   target: number;
   numbers: number[];
-};
-
-// TODO: MOVE TO UTILS FOR REUSABILITY
-/**
- * Reads input from a text file.
- * @param filePath - Path to the input text file.
- * @returns The content of the file as a string.
- */
-const readInputFromFile = (filePath: string): string | undefined => {
-  try {
-    return fs.readFileSync(filePath, "utf-8");
-  } catch (error) {
-    console.error(`Error reading file: ${error.message}`);
-  }
 };
 
 /**
@@ -51,7 +37,15 @@ const canSolve = (
   if (index === numbers.length - 1) {
     return current === target;
   }
-  return (canSolve(numbers, target, index + 1, current + numbers[index + 1])) || (canSolve(numbers, target, index + 1, current * numbers[index + 1]));
+
+  const nextNumber = numbers[index + 1];
+  const concatenated = parseInt(`${current}${nextNumber}`);
+
+  return (
+    canSolve(numbers, target, index + 1, current + nextNumber) ||
+    canSolve(numbers, target, index + 1, current * nextNumber) ||
+    canSolve(numbers, target, index + 1, concatenated)
+  );
 };
 
 /**
@@ -68,5 +62,5 @@ const solveEquations = (input: string): number => {
 
 const filePath = "input";
 const input = readInputFromFile(filePath);
-const results = solveEquations(input);
+const results = solveEquations(input!);
 console.log(results);
