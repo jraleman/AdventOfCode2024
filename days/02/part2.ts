@@ -45,4 +45,4 @@ function countSafeReports(filePath: string): number {
 const filePath = './input';
 const safeReportsCount = countSafeReports(filePath);
 
-console.log("Number of safe reports:", safeReportsCount);
+console.log(safeReportsCount);
